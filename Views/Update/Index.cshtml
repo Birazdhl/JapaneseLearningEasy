@@ -1,0 +1,51 @@
+@model JapaneseLearningApp.ViewModels.UpdateDatabaseViewModel
+@{
+    ViewData["Title"] = "Refresh vocabulary";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card jl-card border jl-accent-border">
+            <div class="card-body p-4 p-lg-5">
+                <h1 class="h3 mb-3 jl-accent-chip">Replace vocabulary from Excel</h1>
+                <p class="text-muted mb-4">
+                    The workbook must expose three labelled columns in row one: <strong>English</strong>, <strong>Romaji</strong>, and <strong>Japanese</strong>.
+                    Rows begin on line two — we truncate <code>JapaneseTable</code> beforehand for a deterministic refresh.
+                </p>
+
+                @if (Model.IsDatabaseEmpty)
+                {
+                    <div class="alert alert-info border-0 jl-card-muted mb-4" role="status">
+                        <strong>Heads-up.</strong> Your vocabulary catalog is empty. Import an .xlsx file to unlock quizzes and dashboards.
+                    </div>
+                }
+
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div asp-validation-summary="All" class="alert alert-danger border-0" role="alert"></div>
+                }
+
+                <form asp-action="Index" asp-controller="Update" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    @Html.AntiForgeryToken()
+                    <div class="mb-3">
+                        <label asp-for="Spreadsheet" class="form-label"></label>
+                        <input asp-for="Spreadsheet" class="form-control" type="file" accept=".xlsx" />
+                        <div class="form-text text-muted">
+                            Accepted format: Excel 2007+ (.xlsx) • Maximum size 5&nbsp;MB.
+                        </div>
+                        <span asp-validation-for="Spreadsheet" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex flex-column flex-lg-row gap-3 align-items-lg-center">
+                        <button type="submit" class="btn jl-btn-primary btn-lg px-4">Import workbook</button>
+                        <a class="btn btn-outline-secondary" asp-controller="Words" asp-action="Index">Preview current words</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

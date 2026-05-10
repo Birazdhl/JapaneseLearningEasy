@@ -1,0 +1,8 @@
+.ql-error-lead strong {
+    color: inherit;
+}
+
+/* Extra spacing defaults */
+main .page-heading-gap {
+    margin-bottom: 1.5rem;
+}

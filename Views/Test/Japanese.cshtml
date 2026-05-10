@@ -1,0 +1,79 @@
+@using JapaneseLearningApp.Controllers
+@{
+    ViewData["Title"] = "Japanese-first review";
+}
+
+<div class="jl-quiz-root" data-kind="japanese">
+    <div class="d-flex flex-column flex-lg-row gap-4 justify-content-lg-between align-items-lg-start mb-4">
+        <div>
+            <h1 class="h3 jl-accent-chip mb-1">Recall English from kana</h1>
+            <p class="text-muted mb-1">Reveal shows <strong>only</strong> the English counterpart — intentionally hiding romaji reinforcement.</p>
+            <p class="text-muted small mb-0">Queues mirror the English flow: randomized main pass followed by lingering wrongs.</p>
+        </div>
+        <button type="button" class="btn jl-btn-primary quiz-restart">
+            Restart test
+        </button>
+    </div>
+
+    <div id="quiz-complete-pill" class="badge rounded-pill jl-card-muted jl-accent-chip d-none px-3 py-2 mb-4">
+        All characters mastered ✓
+    </div>
+
+    <div class="progress mb-2" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="height: 10px">
+        <div class="progress-bar jl-progress-accent rounded-pill" style="width:0%" aria-valuenow="0" aria-live="polite"></div>
+    </div>
+    <p id="quiz-progress-copy" class="jl-progress-muted text-muted mb-4">Loading progress…</p>
+
+    <div class="quiz-working">
+        <div class="card jl-card border jl-accent-border mx-auto" style="max-width:760px;">
+            <div class="card-body p-4 p-lg-5 text-center">
+                <p id="quiz-meta-id" class="small text-muted mb-2">Preparing flashcard…</p>
+                <div id="quiz-prompt-body" class="jl-flash-prompt text-break px-3 fs-2">
+                    Hang tight…
+                </div>
+
+                <div id="quiz-answer-pane" class="jl-reveal-pane jl-card jl-card-muted px-4 py-4 mt-4 mx-auto shadow-sm rounded-4 text-start">
+                    <div id="quiz-romaji-row" class="mb-4 d-none">
+                        <span class="text-uppercase small text-muted fw-semibold d-block mb-2">Romaji pronunciation</span>
+                        <span id="quiz-romaji-reveal" class="lead"></span>
+                    </div>
+                    <div id="quiz-meaning-row" class="">
+                        <span class="text-uppercase small text-muted fw-semibold d-block mb-2"><span id="quiz-meaning-label">English</span></span>
+                        <span id="quiz-meaning-reveal" class="h4 jl-accent-chip fw-semibold mb-0"></span>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-grid gap-3">
+                    <button type="button" class="btn btn-outline-secondary w-100" id="quiz-show-answer-btn">Show answer</button>
+                    <div id="quiz-mark-group" class="row row-cols-1 row-cols-sm-2 gx-4 gy-3 d-none">
+                        <div class="col">
+                            <button type="button" class="btn btn-success btn-lg w-100 quiz-mark-right">I got it right ✓</button>
+                        </div>
+                        <div class="col">
+                            <button type="button" class="btn btn-danger btn-lg w-100 quiz-mark-wrong">Needs review ✕</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="quiz-complete d-none jl-card border border-success jl-card-muted px-4 py-5 text-center mx-auto rounded-4" style="max-width:760px;">
+        <h2 class="h4 jl-accent-chip mb-3">Session complete!</h2>
+        <p class="quiz-complete-message mb-0 text-muted lh-lg fs-6"></p>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/flashcard-test.js" asp-append-version="true"></script>
+    <script>
+        $(function () {
+            initFlashCardQuiz("japanese", {
+                restartUrl: "@Url.Action(nameof(TestController.RestartJapaneseTest), "Test")",
+                progressUrl: "@Url.Action(nameof(TestController.GetTestProgressJapanese), "Test")",
+                markRightUrl: "@Url.Action(nameof(TestController.MarkAsRightJapanese), "Test")",
+                markWrongUrl: "@Url.Action(nameof(TestController.MarkAsWrongJapanese), "Test")"
+            });
+        });
+    </script>
+}

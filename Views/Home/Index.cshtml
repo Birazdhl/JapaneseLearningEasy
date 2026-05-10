@@ -1,0 +1,93 @@
+﻿@model JapaneseLearningApp.ViewModels.HomeIndexViewModel
+@{
+    ViewData["Title"] = "Learning Studio";
+}
+
+<section class="jl-hero-overlay text-center mb-5 shadow-lg">
+    <div class="w-100">
+        <p class="text-uppercase small fw-semibold mb-3 text-white-50">Study • Practice • Recall</p>
+        <h1 class="display-4 fw-semibold mb-3">Welcome to Learning Japanese</h1>
+        <p class="lead mb-4 text-white">Gentle cards, purposeful repetition, and a calm palette modeled after Kyoto evenings.</p>
+        <div class="d-inline-flex gap-3 flex-wrap justify-content-center">
+            <span class="badge rounded-pill text-bg-light text-dark px-3 py-2">Focus on conversation-first vocabulary</span>
+            <span class="badge rounded-pill text-bg-light text-dark px-3 py-2">Cherry blossom inspired motion</span>
+        </div>
+    </div>
+</section>
+
+<div class="row g-4 mb-5">
+    <div class="col-md-6 col-xl-3">
+        <div class="card jl-card jl-card-muted h-100">
+            <div class="card-body">
+                <p class="text-uppercase text-muted small fw-semibold mb-1">Vocabulary synced</p>
+                <p class="display-6 jl-accent-chip mb-0">@Model.TotalWords</p>
+                <small class="text-muted">JapaneseTable rows counted live from SQL Server.</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card jl-card h-100">
+            <div class="card-body">
+                <p class="text-uppercase text-muted small fw-semibold mb-1">Last database refresh</p>
+                <p class="h4 mb-0">
+                    @if (Model.LastDatabaseImportUtc is DateTimeOffset last)
+                    {
+                        <span>@last.ToLocalTime().ToString("f")</span>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Waiting for initial import…</span>
+                    }
+                </p>
+                <small class="text-muted">Captured each time `/Update` finishes successfully.</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-4">
+        <div class="card jl-card jl-card-muted h-100">
+            <div class="card-body">
+                <p class="text-uppercase small fw-semibold mb-3 jl-accent-chip">Momentum</p>
+                <ul class="list-unstyled mb-0 small lh-lg">
+                    <li>• Shuffle-based English &amp; kana quizzes</li>
+                    <li>• Wrong-stack review loops until mastery</li>
+                    <li>• Excel-driven bulk refresh for clean datasets</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-heading-gap">
+    <h2 class="h4 jl-accent-chip">Jump right in</h2>
+    <p class="text-muted">Three hero flows keep your session tight on mobile too.</p>
+</div>
+
+<div class="row g-4 pb-5">
+    <div class="col-md-4">
+        <div class="card jl-card jl-quick-card h-100 border jl-accent-border">
+            <div class="card-body d-flex flex-column">
+                <h3 class="h5 jl-accent-chip">Sync vocabulary</h3>
+                <p class="flex-grow-1 text-muted small">Truncate + replace safely from spreadsheets with guarded validation.</p>
+                <a class="btn jl-btn-primary mt-2 stretched-link text-decoration-none" asp-controller="Update" asp-action="Index">Upload Excel workbook</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card jl-card jl-quick-card h-100 border jl-accent-border">
+            <div class="card-body d-flex flex-column">
+                <h3 class="h5 jl-accent-chip">Recall from English cues</h3>
+                <p class="flex-grow-1 text-muted small">Reveal romaji plus kana, log correct answers, revisit misses.</p>
+                <a class="btn jl-btn-primary mt-2 stretched-link text-decoration-none" asp-controller="Test" asp-action="English">Start English test</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card jl-card jl-quick-card h-100 border jl-accent-border">
+            <div class="card-body d-flex flex-column">
+                <h3 class="h5 jl-accent-chip">Recall from Japanese</h3>
+                <p class="flex-grow-1 text-muted small">See kana first, unveil English only — perfect for immersion.</p>
+                <a class="btn jl-btn-primary mt-2 stretched-link text-decoration-none" asp-controller="Test" asp-action="Japanese">Start Japanese test</a>
+            </div>
+        </div>
+    </div>
+</div>

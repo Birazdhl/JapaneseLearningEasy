@@ -1,0 +1,68 @@
+@model List<JapaneseLearningApp.Models.JapaneseWord>
+@{
+    ViewData["Title"] = "All Words";
+}
+
+<div class="d-flex flex-column flex-lg-row gap-3 justify-content-lg-between align-items-lg-center mb-4">
+    <div>
+        <h1 class="h3 jl-accent-chip mb-1">Lesson catalog</h1>
+        <p class="text-muted mb-0">Live SQL snapshot — filtering happens client-side for snappy lookups.</p>
+    </div>
+    <span class="badge rounded-pill text-bg-secondary align-self-lg-center">Words loaded: @Model.Count</span>
+</div>
+
+<div class="card jl-card mb-5">
+    <div class="card-body">
+        <div class="input-group mb-3">
+            <span class="input-group-text bg-transparent jl-accent-chip">🔍</span>
+            <input type="text" id="wordSearch" class="form-control jl-search-field" placeholder="Filter by English, romaji, or Japanese…" aria-label="Filter words">
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0" id="jlWordTable">
+                <thead class="jl-table-head">
+                    <tr>
+                        <th scope="col">English</th>
+                        <th scope="col">Romaji</th>
+                        <th scope="col">Japanese</th>
+                    </tr>
+                </thead>
+                <tbody id="jlWordRows">
+                    @foreach (var word in Model)
+                    {
+                        <tr data-search="@($"{word.English} {word.Romaji} {word.Japanese}")">
+                            <td>@word.English</td>
+                            <td>@word.Romaji</td>
+                            <td class="font-monospace fw-semibold">@word.Japanese</td>
+                        </tr>
+                    }
+                    @if (Model.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="3" class="text-center text-muted py-5">
+                                Nothing to inspect yet — run an import via <a asp-controller="Update" asp-action="Index">Update Database</a>.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            var input = document.getElementById("wordSearch");
+            if (!input) return;
+
+            input.addEventListener("input", function () {
+                var needle = input.value.trim().toLowerCase();
+                document.querySelectorAll("#jlWordRows tr[data-search]").forEach(function (row) {
+                    var haystack = row.getAttribute("data-search").toLowerCase();
+                    row.classList.toggle("d-none", needle.length && haystack.indexOf(needle) === -1);
+                });
+            });
+        })();
+    </script>
+}

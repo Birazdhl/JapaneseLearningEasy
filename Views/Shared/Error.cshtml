@@ -1,0 +1,63 @@
+﻿@model ErrorViewModel
+@{
+    ViewData["Title"] = "Something went sideways";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card jl-card border jl-accent-border mb-4">
+            <div class="card-body p-4">
+                <h1 class="h3 jl-accent-chip mb-3">We hit an unexpected snag</h1>
+                <p class="text-muted mb-3">
+                    The request crashed before finishing. If you recently uploaded vocabulary, skim the bullets below—they cover the fixes we see most often.
+                </p>
+
+                @if (Model.ShowRequestId)
+                {
+                    <p class="mb-4">
+                        <strong>Correlation ID:</strong> <code class="jl-code-badge">@Model.RequestId</code>
+                    </p>
+                }
+
+                @if (Model.ShowDiagnostics)
+                {
+                    <div class="alert alert-danger jl-error-panel border-0">
+                        <strong>Developer diagnostics</strong>
+                        <div class="mt-2 mb-0 text-break"><code>@Model.Diagnostics</code></div>
+                        <small class="d-block mt-3 text-muted">These details appear only while <code>ASPNETCORE_ENVIRONMENT=Development</code>.</small>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-light border jl-accent-border">
+                        <h2 class="h6 jl-accent-chip">Need the real error text?</h2>
+                        <ol class="mb-0 ps-3">
+                            <li>Set <code>ASPNETCORE_ENVIRONMENT</code> to <strong>Development</strong> before launching (<code>launchSettings.json</code> profiles already do this).</li>
+                            <li>If you publish with IIS/Azure, temporarily enable richer logging or redeploy Dev settings on a sandbox machine.</li>
+                        </ol>
+                    </div>
+                }
+
+                <div class="list-group jl-error-checklist rounded-4 overflow-hidden mb-4">
+                    <div class="list-group-item jl-checklist-heading text-uppercase small fw-semibold text-muted py-3">
+                        Common upload blockers after Excel imports
+                    </div>
+                    <div class="list-group-item jl-checklist-item">
+                        • Run <strong>Update-Database</strong> (<code>dotnet ef database update</code>) so <code>JapaneseTable</code> and <code>AppMetadata</code> exist locally.
+                    </div>
+                    <div class="list-group-item jl-checklist-item">
+                        • Confirm SQL Server listens on your connection string and that the catalog (for example <code>JapanDB</code>) matches your environment.
+                    </div>
+                    <div class="list-group-item jl-checklist-item border-0 rounded-0 pb-4">
+                        • Multipart uploads add ~1 MB of framing metadata; we now allocate extra headroom automatically—still keep workbooks ≤ 5 MB.
+                    </div>
+                </div>
+
+                <div class="d-flex flex-column flex-lg-row gap-3">
+                    <a class="btn jl-btn-primary" asp-controller="Update" asp-action="Index">Back to Excel import</a>
+                    <a class="btn btn-outline-secondary" asp-controller="Home" asp-action="Index">Return home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
