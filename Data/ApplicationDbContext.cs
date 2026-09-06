@@ -34,3 +34,6 @@ public class ApplicationDbContext : DbContext
         });
     }
 }
+
+
+//just for the sake of ci cd
